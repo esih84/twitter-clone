@@ -50,19 +50,19 @@ const Modal = ({
           className="
          relative
          w-full
-         lg:w-3/6
+         md:w-3/6
          my-6
          mx-auto
-         lg:max-w-3xl
+         md:max-w-2xl
          h-full
-         lg:h-auto
+         md:h-fit
         "
         >
           {/* content */}
           <div
             className="
              h-full
-             lg:h-auto
+             md:h-fit
              border-0
              rounded-lg
              shadow-lg
