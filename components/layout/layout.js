@@ -1,3 +1,4 @@
+import FollowBar from "./FollowBar";
 import SideBar from "./SideBar";
 
 const Layout = ({ children }) => {
@@ -9,6 +10,7 @@ const Layout = ({ children }) => {
           <div className=" col-span-3 lg:col-span-2 border-x border-neutral-800">
             {children}
           </div>
+          <FollowBar/>
         </div>
       </div>
     </div>
