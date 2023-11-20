@@ -1,9 +1,8 @@
-import Image from 'next/image'
-
+import Header from "@/components/layout/Header"
 export default function Home() {
   return (
-    <div className=" text-3xl text-sky-500">
-      hell
-    </div>
+    <>
+      <Header  lable="Home"/>
+    </>
   )
 }
