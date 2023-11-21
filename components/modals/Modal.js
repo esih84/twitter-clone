@@ -18,11 +18,12 @@ const Modal = ({
     }
     onClose();
   }, [disabled]);
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback((e) => {
+
     if (disabled) {
       return;
     }
-    onSubmit();
+    onSubmit(e);
   }, [disabled]);
   if (!isOpen) {
     return null;
@@ -100,7 +101,7 @@ const Modal = ({
                 secondary 
                 fullwith 
                 large 
-                onClick={submitHandler}/>
+                onClick={(e)=>submitHandler(e)}/>
                 {footer}
             </div>
 

@@ -4,6 +4,9 @@ import Input from "../modules/Input";
 import Modal from "./Modal";
 import useRegisterModal from "@/hooks/useRegisterModal";
 import useLoginModal from "@/hooks/useLoginModal";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 const RegisterModal = () => {
   const loginModal = useLoginModal();
@@ -22,18 +25,47 @@ const RegisterModal = () => {
     loginModal.onOpen();
   }, [registerModal, loginModal, isLoading]);
 
-  const submitHandler = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      // Todo add Register
+  const submitHandler = useCallback(
+    async () => {
+      try {
+        setIsLoading(true);
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          body: JSON.stringify({ email, username, name, password }),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+        if (!data.error) {
+          toast.success("account created");
 
-      registerModal.onClose();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [registerModal]);
+          registerModal.onClose();
+
+          await signIn("credentials", {
+            email,
+            password,
+            redirect: false,
+          });
+        } else {
+          toast.error(data.error);
+        }
+        //  const res = await axios.post(
+        //     "/api/auth/register",
+        //     {
+        //       email,
+        //       password,
+        //       username,
+        //       name,
+        //     },
+        //     { headers: { "Content-Type": "application/json" } }
+        //   );
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [registerModal, email, password, username, name]
+  );
 
   const bodyContent = (
     <div className=" flex flex-col gap-4">
@@ -57,6 +89,7 @@ const RegisterModal = () => {
       />
       <Input
         placeholder="Password"
+        type="password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
         disabled={isLoading}

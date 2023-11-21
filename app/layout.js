@@ -3,8 +3,7 @@ import "./globals.css";
 import Layout from "@/components/layout/layout";
 import LoginModel from "@/components/modals/LoginModal";
 import RegisterModal from "@/components/modals/RegisterModal";
-// import Modal from "@/components/layout/Modal";
-
+import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,9 +15,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LoginModel/>
-        <RegisterModal/>
-        <Layout>{children}</Layout>
+        <Toaster />
+
+        <Layout>
+          <LoginModel />
+          <RegisterModal />
+          {children}
+        </Layout>
       </body>
     </html>
   );
