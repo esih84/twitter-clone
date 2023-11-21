@@ -25,7 +25,7 @@ const Avatar = ({ userId, isLarge = false, hasBorder = false }) => {
          transition cursor-pointer relative
         `}
     >
-      <Image fill style={{
+      <Image fill priority style={{
         objectFit: "cover",
         borderRadius: "100%"
       }}

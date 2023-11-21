@@ -5,6 +5,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 const serverAuth =async () => {
     const session = await getServerSession(authOptions)
+    // console.log(session)
     if (!session?.user?.email) {
         throw new Error('not Signed in')
     }
@@ -13,6 +14,7 @@ const serverAuth =async () => {
             email: session.user.email
         }
     })
+    // console.log(currentUser)
     if (!currentUser) {
         throw new Error('not Signed in')
         

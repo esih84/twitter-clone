@@ -6,7 +6,8 @@ export const GET = async (req) => {
   try {
 
     const {currentUser}= await serverAuth()
-    return NextResponse.json({currentUser},{status:200})
+    // console.log(currentUser)
+    return NextResponse.json({...currentUser},{status:200})
 
   } catch (error) {
     return NextResponse.json({ status: "failed" }, { status: 400 });
