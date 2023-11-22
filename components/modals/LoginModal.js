@@ -22,8 +22,7 @@ const LoginModal = () => {
   }, [registerModal, loginModal, isLoading]);
 
   const submitHandler = useCallback(
-    async (e) => {
-      e.preventDefault();
+    async () => {
       try {
         setIsLoading(true);
         // Todo add login

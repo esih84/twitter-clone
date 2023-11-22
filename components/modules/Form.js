@@ -12,6 +12,7 @@ const Form = ({ placeHolder, isComment = false, postId = false }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const { data: currentUser } = useCurrentUser();
+  // console.log(  currentUser)
   const { mutate: mutatePosts } = usePosts();
 
   const [body, setBody] = useState("");

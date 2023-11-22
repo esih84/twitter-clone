@@ -25,47 +25,39 @@ const RegisterModal = () => {
     loginModal.onOpen();
   }, [registerModal, loginModal, isLoading]);
 
-  const submitHandler = useCallback(
-    async () => {
-      try {
-        setIsLoading(true);
-        const res = await fetch("/api/auth/register", {
-          method: "POST",
-          body: JSON.stringify({ email, username, name, password }),
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        if (!data.error) {
-          toast.success("account created");
+  const submitHandler = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ email, username, name, password }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      if (!data.error) {
+        toast.success("account created");
 
-          registerModal.onClose();
-
-          await signIn("credentials", {
-            email,
-            password,
-            redirect: false,
-          });
-        } else {
-          toast.error(data.error);
-        }
-        //  const res = await axios.post(
-        //     "/api/auth/register",
-        //     {
-        //       email,
-        //       password,
-        //       username,
-        //       name,
-        //     },
-        //     { headers: { "Content-Type": "application/json" } }
-        //   );
-      } catch (error) {
-        toast.error(error);
-      } finally {
-        setIsLoading(false);
+        registerModal.onClose();
+        loginModal.onOpen();
+      } else {
+        toast.error(data.error);
       }
-    },
-    [registerModal, email, password, username, name]
-  );
+      //  const res = await axios.post(
+      //     "/api/auth/register",
+      //     {
+      //       email,
+      //       password,
+      //       username,
+      //       name,
+      //     },
+      //     { headers: { "Content-Type": "application/json" } }
+      //   );
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [registerModal, email, password, username, name]);
 
   const bodyContent = (
     <div className=" flex flex-col gap-4">
