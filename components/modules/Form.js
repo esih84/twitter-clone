@@ -7,6 +7,7 @@ import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
 import Avatar from "./Avatar";
+import usePost from "@/hooks/usePost";
 
 const Form = ({ placeHolder, isComment = false, postId = false }) => {
   const registerModal = useRegisterModal();
@@ -14,25 +15,31 @@ const Form = ({ placeHolder, isComment = false, postId = false }) => {
   const { data: currentUser } = useCurrentUser();
   // console.log(  currentUser)
   const { mutate: mutatePosts } = usePosts();
+  const { mutate: mutatePost } = usePost(postId);
 
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  // console.log(isComment);
   const submitHandler = useCallback(async () => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/posts", {
+
+      const url = isComment ? "/api/comments" : "/api/posts";
+      // console.log(url)
+      const send = isComment ? { body, postId } : { body };
+      const message = isComment ? "comment created" : " Tweet created";
+      const res = await fetch(url, {
         method: "POST",
-        body: JSON.stringify({
-          body,
-        }),
+        body: JSON.stringify(send),
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
       if (!data.error) {
-        toast.success(" Tweet created");
+        toast.success(message);
+
         setBody("");
         mutatePosts();
+        mutatePost();
       } else {
         toast.error(data.error);
       }
@@ -41,7 +48,7 @@ const Form = ({ placeHolder, isComment = false, postId = false }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [body, mutatePosts]);
+  }, [body, mutatePosts, mutatePost, isComment, postId]);
   return (
     <div className="  border-b border-neutral-800 px-5 py-2">
       {currentUser ? (
@@ -50,11 +57,11 @@ const Form = ({ placeHolder, isComment = false, postId = false }) => {
             <Avatar userId={currentUser?.id} />
           </div>
           <div className=" w-full">
-            <textarea 
-            disabled={isLoading}
-            onChange={(e)=> setBody(e.target.value)}
-            value={body}
-            className="
+            <textarea
+              disabled={isLoading}
+              onChange={(e) => setBody(e.target.value)}
+              value={body}
+              className="
              disabled:opacity-80
              peer
              resize-none 
@@ -67,22 +74,24 @@ const Form = ({ placeHolder, isComment = false, postId = false }) => {
              placeholder-neutral-500
              text-white
             "
-            placeholder={placeHolder}
+              placeholder={placeHolder}
             ></textarea>
-            <hr className="
+            <hr
+              className="
              opacity-0
              peer-focus:opacity-100
              h-[1px]
              w-full
              border-neutral-800
              transition
-            "/>
+            "
+            />
             <div className=" mt-4 flex flex-row justify-end">
-                <Button
+              <Button
                 disabled={isLoading || !body}
                 onClick={submitHandler}
                 lable="Tweet"
-                 />
+              />
             </div>
           </div>
         </div>
