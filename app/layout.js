@@ -4,6 +4,7 @@ import Layout from "@/components/layout/layout";
 import LoginModel from "@/components/modals/LoginModal";
 import RegisterModal from "@/components/modals/RegisterModal";
 import { Toaster } from "react-hot-toast";
+import EditModal from "@/components/modals/EditModal";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
         <Toaster />
 
         <Layout>
+          <EditModal />
           <LoginModel />
           <RegisterModal />
           {children}

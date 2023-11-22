@@ -2,7 +2,7 @@ const Input = ({ placeholder, value, type, disabled = false, onChange }) => {
   return <input 
   disabled={disabled} 
   onChange={onChange} 
-  value={value} 
+  value={value || ""} 
   placeholder={placeholder} 
   type={type} 
   className="
