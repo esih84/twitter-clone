@@ -1,17 +1,19 @@
 "use client";
 import Avatar from "@/components/modules/Avatar";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useLike from "@/hooks/useLike";
 import useLoginModal from "@/hooks/useLoginModal";
 import { formatDistanceToNowStrict } from "date-fns";
 import { da } from "date-fns/locale";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 
 const PostItem = ({ data, userId = false }) => {
   const router = useRouter();
   const loginModal = useLoginModal();
   const { data: currentUser } = useCurrentUser();
+  const {isLiking, toggleLike}= useLike({postId:data.id, userId})
 
   const goToUser = useCallback(
     (e) => {
@@ -22,19 +24,25 @@ const PostItem = ({ data, userId = false }) => {
   );
   const goToPost = useCallback((e) => {
     e.stopPropagation();
-    router.push(`/posts/${data.id}`);
+    router.push(`/post/${data.id}`);
   });
   const likeHandler = useCallback((e) => {
     e.stopPropagation();
-    loginModal.onOpen();
-  });
+    if (!currentUser) {
+      
+      return loginModal.onOpen();
+    }
+    toggleLike()
+  },[currentUser, loginModal, toggleLike]);
 
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
       return null;
     }
     return formatDistanceToNowStrict(new Date(data.createdAt));
-  });
+  },[data.createdAt]);
+
+  const LikeIcon = isLiking ? AiFillHeart : AiOutlineHeart
   return (
     <div
       onClick={goToPost}
@@ -61,26 +69,27 @@ const PostItem = ({ data, userId = false }) => {
                         
                         "
             >
-              {data.user.name}
+              {data.user?.name}
             </p>
             <span
               onClick={goToUser}
               className=" text-neutral-500 cursor-pointer hover:underline hidden md:block 
                         "
             >
-              @{data.user.username}
+              @{data.user?.username}
             </span>
             <span className="  text-neutral-500 text-sm">{createdAt}</span>
           </div>
-          <siv className=" text-white mt-1">{data.body}</siv>
+          <div className=" text-white mt-1">{data.body}</div>
           <div className=" flex flex-row items-center mt-3 gap-10">
             <div className=" flex flex-row items-center text-neutral-500 gap-2 transition hover:text-sky-500">
               <AiOutlineMessage size={20} />
-              <p>{data.comments?.length || 0}</p>
+              <p>{data.comments?.length}</p>
             </div>
             <div onClick={likeHandler} className=" flex flex-row items-center text-neutral-500 gap-2 transition hover:text-red-500">
-              <AiOutlineHeart size={20} />
-              <p>{data.comments?.length || 0}</p>
+
+              <LikeIcon size={20} color={isLiking?"red": ''} />
+              <p>{data.likedId?.length }</p>
             </div>
           </div>
         </div>
