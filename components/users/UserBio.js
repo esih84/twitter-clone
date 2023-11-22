@@ -5,12 +5,15 @@ import { useMemo } from "react";
 import Button from "../modules/Button";
 import { BiCalendar } from "react-icons/bi";
 import useEditModal from "@/hooks/useEditModal";
+import useFollow from "@/hooks/useFollow";
 
 const UserBio = ({ userId }) => {
   const { data: currentUser } = useCurrentUser(userId);
   const { data: fetchUser } = useUser(userId);
-  // console.log(currentUser.id)
+  console.log(fetchUser)
  const editModal = useEditModal()
+
+ const { isFollowing, toggleFollow}= useFollow(userId)
   const createdAt = useMemo(() => {
     if (!fetchUser?.createdAt) {
       return null;
@@ -23,7 +26,7 @@ const UserBio = ({ userId }) => {
         {currentUser?.id === userId ? (
           <Button secondary lable="Edit" onClick={editModal.onOpen} />
         ) : (
-          <Button secondary lable="Follow" onClickk={() => {}} />
+          <Button secondary={!isFollowing} outline={isFollowing} lable={isFollowing? "unFollow": "Follow"} onClick={toggleFollow} />
         )}
       </div>
       <div className=" mt-8 px-4">
@@ -52,7 +55,7 @@ const UserBio = ({ userId }) => {
             <p className="text-neutral-500">Following</p>
           </div>
           <div className="flex flex-row items-center gap-1">
-            <p className=" text-white">{fetchUser?.followersCount || 0}</p>
+            <p className=" text-white">{fetchUser?.followerscount || 0}</p>
             <p className="text-neutral-500">Followers</p>
           </div>
         </div>
