@@ -8,9 +8,9 @@ import useEditModal from "@/hooks/useEditModal";
 import useFollow from "@/hooks/useFollow";
 
 const UserBio = ({ userId }) => {
-  const { data: currentUser } = useCurrentUser(userId);
+  const { data: currentUser } = useCurrentUser();
   const { data: fetchUser } = useUser(userId);
-  console.log(fetchUser)
+  // console.log(fetchUser)
  const editModal = useEditModal()
 
  const { isFollowing, toggleFollow}= useFollow(userId)
