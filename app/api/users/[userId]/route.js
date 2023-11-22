@@ -19,6 +19,6 @@ export const GET = async (request, {params: {userId}}) => {
     // console.log(users)
     return NextResponse.json({...existingUser, followerscount}, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 400 });
+    return NextResponse.json({ error:"something went error " }, { status: 400 });
   }
 };
